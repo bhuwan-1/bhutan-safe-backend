@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 
 //routes
 app.use("/auth", require("./routes/auth/authRoutes.js"));
+app.use("/user", require("./routes/user/userRoutes.js"));
 
 
 connectDB()
