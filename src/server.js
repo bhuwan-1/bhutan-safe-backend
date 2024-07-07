@@ -6,11 +6,15 @@ const connectDB = require("../db/db.js");
 require("dotenv").config();
 
 const app = express();
+
+//middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-//controllers
+//routes
+app.use("/auth", require("./routes/auth/authRoutes.js"));
+
 
 connectDB()
   .then(() => {
