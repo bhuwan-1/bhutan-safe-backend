@@ -47,7 +47,7 @@ function buildRecipient(list = []) {
       const emailData = {
         personalizations: [{ to, cc, bcc }],
         replyTo: from || FROM_EMAIL_ADDRESS,
-        from: { email: from || FROM_EMAIL_ADDRESS, name: "Beyul" },
+        from: { email: from || FROM_EMAIL_ADDRESS, name: "Bhutan Safe" },
         subject,
         text: text || " ",
         html: text || " ",
