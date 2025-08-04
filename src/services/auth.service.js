@@ -13,4 +13,14 @@ const registerService = async (requestBody) => {
     return token;
 };
 
-module.exports = { registerService };
+const loginService = async (requestBody) => {
+    const {nameOrPassword, password} = requestBody;
+    let user = await User.findOne({email: nameOrPassword});
+    if (!user) user = await User.findOne({phone: nameOrPassword});
+    if (!user) throw new Error("Invalid Credentails");
+    const passwordMatch = await bcrypt.compare(password, user?.password);
+    if (!passwordMatch) throw new Error("Invalid Credentails");
+    return await generateToken(user);
+}
+
+module.exports = { registerService, loginService };
