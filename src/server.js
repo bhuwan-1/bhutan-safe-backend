@@ -4,6 +4,7 @@ const express = require("express");
 const { green, red } = require("colorette");
 const cors = require("cors");
 const connectDB = require("../db/db.js");
+const cookieParser = require('cookie-parser');
 
 
 const app = express();
@@ -12,6 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 //routes
 app.use("/auth", require("./routes/auth/authRoutes.js"));
