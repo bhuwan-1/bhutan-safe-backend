@@ -1,9 +1,10 @@
+require("dotenv").config();
+
 const express = require("express");
 const { green, red } = require("colorette");
 const cors = require("cors");
 const connectDB = require("../db/db.js");
 
-require("dotenv").config();
 
 const app = express();
 
