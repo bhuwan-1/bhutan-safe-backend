@@ -4,9 +4,10 @@ const {
   profile,
   forgetPassword,
 } = require("../../controllers/user/userController");
-const { authenticate } = require("../../middlewares/auth");
+const { verifyUser } = require("../../middlewares/verifyuser");
+const { currentUser } = require("../../controllers/auth/authController");
 
-router.get("/profile", authenticate, profile);
+router.get("/profile", verifyUser, currentUser);
 router.post("/forget-password", forgetPassword);
 
 module.exports = router;

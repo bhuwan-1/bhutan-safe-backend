@@ -1,18 +1,20 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const User = require("../../models/users/User");
-const { registerService, loginService, changePassword } = require('./../../services/auth.service');
+const {
+  registerService,
+  loginService,
+  changePassword,
+} = require("./../../services/auth.service");
 const { sendTokenToCookie } = require("../../helpers/cookier.helper");
 
 const register = async (req, res) => {
   try {
-    const exisitingUser = await User.findOne({email: req?.body?.email });
+    const exisitingUser = await User.findOne({ email: req?.body?.email });
     if (exisitingUser) {
       return res.status(400).json({
         success: false,
-        message: 'User is already exists. Please try with different email'
+        message: "User already exists. Please try with different email",
       });
-    };
+    }
     const token = await registerService(req?.body);
     sendTokenToCookie(res, token);
     res.status(201).json({ message: "User registered successfully" });
@@ -24,35 +26,35 @@ const register = async (req, res) => {
 
 const currentUser = async (req, res) => {
   res.status(200).json({
-    user: req.currentUser
+    user: req.currentUser,
   });
 };
 
-const login = async (req, res ) => {
-  try{
-    const accessToken = await loginService(req?.body)
+const login = async (req, res) => {
+  try {
+    const accessToken = await loginService(req?.body);
     sendTokenToCookie(res, accessToken);
     res.status(200).json({
-      message: 'signed in'
+      message: "signed in",
     });
-  } catch(err){
-    console.error(err)
-    return res.status(201).json({message: "Internal Server Error"})
+  } catch (err) {
+    console.error(err);
+    return res.status(201).json({ message: "Internal Server Error" });
   }
-}
+};
 
 const logout = async (req, res) => {
-  res.clearCookie('accessToken');
+  res.clearCookie("accessToken");
   res.status(200).json({
-    message: 'User logged out successfully'
-  })
-}
+    message: "User logged out successfully",
+  });
+};
 
 const passwordChange = async (req, res) => {
   await changePassword(req);
   res.status(200).json({
-    message: 'Password Changed Successfully!'
+    message: "Password Changed Successfully!",
   });
-}
+};
 
 module.exports = { register, login, currentUser, logout, passwordChange };
