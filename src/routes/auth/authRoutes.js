@@ -5,7 +5,7 @@ const { verifyUser } = require("../../middlewares/verifyuser");
 
 router.post('/register', register );
 router.post('/login', login);
-router.get('/', verifyUser, currentUser);
+router.get('/currentUser', verifyUser, currentUser);
 router.post('/logout', logout);
 router.post('/change-password',verifyUser, passwordChange);
 
