@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/users/User");
-const { registerService, loginService } = require('./../../services/auth.service');
+const { registerService, loginService, changePassword } = require('./../../services/auth.service');
 const { sendTokenToCookie } = require("../../helpers/cookier.helper");
 
 const register = async (req, res) => {
@@ -41,11 +41,18 @@ const login = async (req, res ) => {
   }
 }
 
-const logout = async (req, res, next) => {
+const logout = async (req, res) => {
   res.clearCookie('accessToken');
   res.status(200).json({
     message: 'User logged out successfully'
   })
 }
 
-module.exports = { register, login, currentUser, logout };
+const passwordChange = async (req, res) => {
+  await changePassword(req);
+  res.status(200).json({
+    message: 'Password Changed Successfully!'
+  });
+}
+
+module.exports = { register, login, currentUser, logout, passwordChange };

@@ -23,4 +23,28 @@ const loginService = async (requestBody) => {
     return await generateToken(user);
 }
 
-module.exports = { registerService, loginService };
+const changePassword = async (req) => {
+  if (!req?.currentUser?.id) throw new Error("Not authenticated");
+
+  const user = await User.findById(req.currentUser.id);
+  if (!user) throw new Error("User not found");
+
+  const { oldPassword, newPassword } = req.body;
+  if (!oldPassword || !newPassword) {
+    throw new Error("Old and new passwords are required");
+  }
+
+  const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isPasswordMatch) {
+    throw new Error("Old password is incorrect! Please try again");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(newPassword, salt);
+  await user.save();
+
+  return { message: "Password changed successfully" };
+};
+
+
+module.exports = { registerService, loginService, changePassword };
