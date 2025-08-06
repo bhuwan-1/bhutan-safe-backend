@@ -9,8 +9,7 @@ const registerService = async (requestBody) => {
 
   const newUser = new User({ name, email, password: hashedPassword, phone });
   await newUser.save();
-  const token = await generateToken(newUser);
-  return token;
+  return newUser;
 };
 
 const loginService = async (requestBody) => {

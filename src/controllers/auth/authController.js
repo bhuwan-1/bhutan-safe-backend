@@ -4,7 +4,6 @@ const {
   loginService,
   changePassword,
 } = require("./../../services/auth.service");
-const { sendTokenToCookie } = require("../../helpers/cookier.helper");
 
 const register = async (req, res) => {
   try {
@@ -15,8 +14,7 @@ const register = async (req, res) => {
         message: "User already exists. Please try with different email",
       });
     }
-    const token = await registerService(req?.body);
-    sendTokenToCookie(res, token);
+    await registerService(req?.body);
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
     console.log("Error registering user:", err);
@@ -33,9 +31,9 @@ const currentUser = async (req, res) => {
 const login = async (req, res) => {
   try {
     const accessToken = await loginService(req?.body);
-    sendTokenToCookie(res, accessToken);
     res.status(200).json({
       message: "signed in",
+      token: accessToken
     });
   } catch (err) {
     console.error(err);
