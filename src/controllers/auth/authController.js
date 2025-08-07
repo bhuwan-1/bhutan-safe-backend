@@ -33,11 +33,14 @@ const login = async (req, res) => {
     const accessToken = await loginService(req?.body);
     res.status(200).json({
       message: "signed in",
-      token: accessToken
+      token: accessToken,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(201).json({ message: "Internal Server Error" });
+    console.error("Login error:", err);
+    return res.status(401).json({
+      success: false,
+      message: err.message || "Invalid credentials",
+    });
   }
 };
 
@@ -49,10 +52,18 @@ const logout = async (req, res) => {
 };
 
 const passwordChange = async (req, res) => {
-  await changePassword(req);
-  res.status(200).json({
-    message: "Password Changed Successfully!",
-  });
+  try {
+    await changePassword(req);
+    res.status(200).json({
+      message: "Password Changed Successfully!",
+    });
+  } catch (err) {
+    console.error("Password change error:", err);
+    res.status(400).json({
+      success: false,
+      message: err.message || "Failed to change password",
+    });
+  }
 };
 
 module.exports = { register, login, currentUser, logout, passwordChange };
