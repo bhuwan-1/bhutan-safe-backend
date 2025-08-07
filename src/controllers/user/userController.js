@@ -2,8 +2,21 @@ const User = require("../../models/users/User");
 const jwt = require("jsonwebtoken");
 const EmailService = require("../../helpers/mailer");
 
-const profile = async (req, res) => {
-  return res.json({ message: "User profile after auth middleware." });
+const profileUpdate = async (req, res) => {
+  const { name, phone, email } = req.body;
+  const user = await User.findByIdAndUpdate(
+    req.currentUser.id,
+    {
+      name,
+      phone,
+      email,
+    },
+    { new: true }
+  );
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  res.status(200).json({ message: "User profile updated", user });
 };
 
 const forgetPassword = async (req, res) => {
@@ -68,4 +81,4 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { profile, resetPassword, forgetPassword };
+module.exports = { profileUpdate, resetPassword, forgetPassword };
