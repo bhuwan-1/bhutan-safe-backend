@@ -18,6 +18,7 @@ app.use(cookieParser());
 app.use("/auth", require("./routes/auth/authRoutes.js"));
 app.use("/user", require("./routes/user/userRoutes.js"));
 app.use("/contact", require("./routes/contact/contactRoutes.js"));
+app.use("/image", require("./routes/image/image.js"));
 
 connectDB()
   .then(() => {
