@@ -7,10 +7,10 @@ const addContactToUser = async (req, res) => {
     const { name, email, phone, photoUrl } = req.body;
     const userId = req.currentUser.id;
 
-    if (!name || !email || !phone) {
+    if (!name || !phone) {
       return res.status(400).json({
         success: false,
-        message: "Name, email, and phone are required",
+        message: "Name and phone are required",
       });
     }
 
@@ -30,7 +30,11 @@ const addContactToUser = async (req, res) => {
       });
     }
 
-    let contact = await Contact.findOne({ email });
+    // If email is provided, check for existing contact with that email
+    let contact = null;
+    if (email) {
+      contact = await Contact.findOne({ email });
+    }
 
     if (contact) {
       if (user.contacts.includes(contact._id)) {
@@ -42,7 +46,7 @@ const addContactToUser = async (req, res) => {
     } else {
       contact = new Contact({
         name,
-        email,
+        email: email || "",
         phone,
         photoUrl: photoUrl || "",
         users: [userId],
